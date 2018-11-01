@@ -1,0 +1,48 @@
+body {
+  font: 14px "Helvetica Neue", Helvetica, sans-serif;
+  margin: 0;
+}
+
+textarea {
+  font: inherit;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) and (max-device-width:1024px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+.room {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1em;
+}
+
+.seat {
+  padding: 0.5em;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.seat h3 {
+  margin: 0.25em 0;
+}
+
+.seat textarea {
+  width: 30ch;
+  height: 8em;
+  line-height: 1em;
+  display: block;
+  font-family: monospace;
+  resize: none;
+  padding: 0.25em;
+}
+
+.seat.me textarea {
+  background: #f4fff4;
+}
+
+.room-pad {
+  flex: 1;
+}
