@@ -61,7 +61,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fileServer := http.FileServer(http.Dir("."))
+	fileServer := http.FileServer(http.Dir("public"))
 
 	sseServer := sse.SSEServer{}
 	sseServer.Start()
@@ -83,7 +83,7 @@ func main() {
 		}
 	}()
 
-	log.Fatal(http.Serve(ln, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case "GET":
 			if r.URL.Path == "/talk" {
@@ -108,6 +108,7 @@ func main() {
 						sseServer.Broadcast("talker", string(msg))
 					}
 				}
+				w.Header().Set("X-Accel-Buffering", "no")
 				sseServer.ServeHTTPCB(w, r, func(client sse.Client) {
 					for k, v := range talkers {
 						msg, _ := json.Marshal(struct {
@@ -157,5 +158,7 @@ func main() {
 			}
 		}
 		fileServer.ServeHTTP(w, r)
-	})))
+	})
+
+	log.Fatal(http.Serve(ln, nil))
 }
